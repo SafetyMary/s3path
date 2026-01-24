@@ -31,6 +31,8 @@ def register_configuration_parameter(
         raise TypeError(f'path argument have to be a {PurePath} type. got {type(path)}')
     if parameters and not isinstance(parameters, dict):
         raise TypeError(f'parameters argument have to be a dict type. got {type(path)}')
+    if parameters is None and resource is None:
+        raise ValueError('user have to specify parameters or resource arguments')
     accessor.configuration_map.set_configuration(
         path,
         resource=resource,
