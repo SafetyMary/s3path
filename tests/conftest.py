@@ -36,10 +36,3 @@ def s3_mock(reset_configuration_cache):
     with mock_aws():
         register_configuration_parameter(PureS3Path('/'), resource=boto3.resource('s3'))
         yield
-
-
-@pytest.fixture()
-def enable_old_glob():
-    register_configuration_parameter(PureS3Path('/'), glob_new_algorithm=False)
-    yield
-    register_configuration_parameter(PureS3Path('/'), glob_new_algorithm=True)

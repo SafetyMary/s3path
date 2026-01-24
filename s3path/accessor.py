@@ -544,17 +544,13 @@ class _S3ConfigurationMap:
     def default_resource(self):
         return boto3.resource('s3')
 
-    def set_configuration(self, path, *, resource=None, arguments=None, glob_new_algorithm=None):
+    def set_configuration(self, path, *, resource=None, arguments=None):
         self._delayed_setup()
         path_name = str(path)
         if arguments is not None:
             self.arguments[path_name] = arguments
         if resource is not None:
             self.resources[path_name] = resource
-        if glob_new_algorithm is not None:
-            warn(f'glob_new_algorithm Configuration is Deprecated, '
-                 f'in the new version we use only the new algorithm for Globing', category=DeprecationWarning)
-            self.general_options[path_name] = {'glob_new_algorithm': glob_new_algorithm}
         self.get_configuration.cache_clear()
 
     @lru_cache()
@@ -584,7 +580,6 @@ class _S3ConfigurationMap:
             if not self.is_setup:
                 self.arguments = {'/': {}}
                 self.resources = {'/': self.default_resource}
-                self.general_options = {'/': {'glob_new_algorithm': True}}
                 self.is_setup = True
 
 
