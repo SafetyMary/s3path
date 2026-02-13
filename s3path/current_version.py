@@ -8,7 +8,7 @@ from datetime import timedelta
 from contextlib import suppress
 from urllib.parse import unquote
 from pathlib import PurePath, Path
-from typing import TYPE_CHECKING, Literal, Self, Generator, override
+from typing import TYPE_CHECKING, Literal, Self, Generator
 from io import DEFAULT_BUFFER_SIZE, TextIOWrapper
 
 from botocore.exceptions import ClientError
@@ -605,7 +605,6 @@ class S3UriPath(S3Path):
     Overrides __fspath__() to ensure s3 scheme is present during pandas read.
     """
 
-    @override
     def __fspath__(self) -> str:
         return f"s3:/{super().__fspath__()}"
 
