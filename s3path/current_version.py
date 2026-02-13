@@ -8,7 +8,7 @@ from datetime import timedelta
 from contextlib import suppress
 from urllib.parse import unquote
 from pathlib import PurePath, Path
-from typing import TYPE_CHECKING, Literal, Self, Generator
+from typing import TYPE_CHECKING, Literal, Self, Generator, override
 from io import DEFAULT_BUFFER_SIZE, TextIOWrapper
 
 from botocore.exceptions import ClientError
@@ -598,6 +598,16 @@ class S3Path(_PathNotSupportedMixin, PureS3Path, Path):
         sys.audit("pathlib.Path.walk", self, on_error, follow_symlinks)
         yield from accessor.walk(self, topdown=top_down, onerror=on_error)
 
+
+class S3UriPath(S3Path):
+    """S3UriPath class for pandas compatibility.
+
+    Overrides __fspath__() to ensure s3 scheme is present during pandas read.
+    """
+
+    @override
+    def __fspath__(self) -> str:
+        return f"s3:/{super().__fspath__()}"
 
 class PureVersionedS3Path(PureS3Path):
     """
